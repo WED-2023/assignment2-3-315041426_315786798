@@ -64,6 +64,7 @@ async function getRandomRecipes(number) {
 
 
 
+
 module.exports = {getRecipeDetails, searchRecipe, getRandomRecipes};
 
 
