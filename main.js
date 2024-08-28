@@ -1,4 +1,5 @@
 require("dotenv").config();
+console.log("Spoonacular API Key:", process.env.spooncular_apiKey);
 //#region express configures
 var express = require("express");
 var path = require("path");
@@ -49,7 +50,7 @@ const corsConfig = {
 app.use(cors(corsConfig));
 app.options("*", cors(corsConfig));
 
-var port = process.env.PORT || "80"; //local=3000 remote=80
+var port = process.env.PORT || "3000"; //local=3000 remote=80
 //#endregion
 const user = require("./routes/user");
 const recipes = require("./routes/recipes");
@@ -86,7 +87,6 @@ app.use(function (err, req, res, next) {
   console.error(err);
   res.status(err.status || 500).send({ message: err.message, success: false });
 });
-
 
 
 const server = app.listen(port, () => {

@@ -2,7 +2,6 @@ const axios = require("axios");
 const api_domain = "https://api.spoonacular.com/recipes";
 
 
-
 /**
  * Get recipes list from spooncular response and extract the relevant recipe data for preview
  * @param {*} recipes_info 
@@ -52,9 +51,20 @@ async function searchRecipe(recipeName, cuisine, diet, intolerance, number, user
     return getRecipesPreview(response.data.results.map((element) => element.id), username);
 }
 
+async function getRandomRecipes(number) {
+    const response = await axios.get(`${api_domain}/random`, {
+        params: {
+            number: number,
+            apiKey: process.env.spooncular_apiKey // Ensure this matches your .env variable name
+        }
+    });
+    return response.data;
+
+}
 
 
-exports.getRecipeDetails = getRecipeDetails;
+
+module.exports = {getRecipeDetails, searchRecipe, getRandomRecipes};
 
 
 
