@@ -52,6 +52,21 @@ router.get('/favorites', async (req,res,next) => {
   }
 });
 
+router.post('/register'), async (req,res,next) => {
+  try{
+    const username = req.body.username;
+    const password = req.body.password;
+    const first_name = req.body.first_name;
+    const last_name = req.body.last_name;
+    const email = req.body.email;
+    const country = req.body.country;
+    await user_utils.addNewUser(username,password,first_name,last_name,email,country);
+    res.status(201).send("User created");
+  } catch(error){
+    next(error);
+  }
+}
+
 
 
 
