@@ -40,29 +40,31 @@ router.post("/Register", async (req, res, next) => {
 
 router.post("/Login", async (req, res, next) => {
   try {
-    // check that username exists
+    // Check that the username exists
     const users = await DButils.execQuery("SELECT username FROM users");
     if (!users.find((x) => x.username === req.body.username))
       throw { status: 401, message: "Username or Password incorrect" };
 
-    // check that the password is correct
+    // Retrieve the user details from the database
     const user = (
       await DButils.execQuery(
         `SELECT * FROM users WHERE username = '${req.body.username}'`
       )
     )[0];
 
+    // Check that the password is correct
     if (!bcrypt.compareSync(req.body.password, user.password)) {
       throw { status: 401, message: "Username or Password incorrect" };
     }
 
-    // Set cookie
-    req.session.user_id = user.user_id;
+    // Set the user_id in the session
+    req.session.user_id = user.userID; // This is where session.user_id is set
 
+    // Log session data to verify it's correctly set
+    console.log("Session Data after setting userID:", req.session);
 
-    // return cookie
+    // Return success response
     res.status(200).send({ message: "login succeeded", success: true });
-
   } catch (error) {
     next(error);
   }

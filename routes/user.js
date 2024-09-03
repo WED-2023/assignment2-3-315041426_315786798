@@ -9,10 +9,12 @@ const recipe_utils = require("./utils/recipes_utils");
  */
 router.use(async function (req, res, next) {
   if (req.session && req.session.user_id) {
-    DButils.execQuery("SELECT user_id FROM users").then((users) => {
-      if (users.find((x) => x.user_id === req.session.user_id)) {
+    DButils.execQuery("SELECT userID FROM users").then((users) => {
+      if (users.find((x) => x.userID === req.session.user_id)) { 
         req.user_id = req.session.user_id;
         next();
+      } else {
+        res.sendStatus(401);
       }
     }).catch(err => next(err));
   } else {
@@ -24,16 +26,17 @@ router.use(async function (req, res, next) {
 /**
  * This path gets body with recipeId and save this recipe in the favorites list of the logged-in user
  */
-router.post('/favorites', async (req,res,next) => {
-  try{
+router.post('/favorites', async (req, res, next) => {
+  try {
     const user_id = req.session.user_id;
-    const recipe_id = req.body.recipeId;
-    await user_utils.markAsFavorite(user_id,recipe_id);
+    const recipe_id = req.body.recipe_id;
+    await user_utils.markAsFavorite(user_id, recipe_id);
     res.status(200).send("The Recipe successfully saved as favorite");
-    } catch(error){
+  } catch (error) {
     next(error);
   }
-})
+});
+
 
 /**
  * This path returns the favorites recipes that were saved by the logged-in user
@@ -52,20 +55,6 @@ router.get('/favorites', async (req,res,next) => {
   }
 });
 
-router.post('/register'), async (req,res,next) => {
-  try{
-    const username = req.body.username;
-    const password = req.body.password;
-    const first_name = req.body.first_name;
-    const last_name = req.body.last_name;
-    const email = req.body.email;
-    const country = req.body.country;
-    await user_utils.addNewUser(username,password,first_name,last_name,email,country);
-    res.status(201).send("User created");
-  } catch(error){
-    next(error);
-  }
-}
 
 
 
