@@ -55,6 +55,31 @@ router.get('/favorites', async (req,res,next) => {
   }
 });
 
+router.post('/my-recipes', async (req, res, next) => {
+  try {
+    const user_id = req.session.user_id;
+    const recipe_name = req.body.recipe_name;
+    const ingredients = JSON.stringify(req.body.ingredients);
+    const instructions = JSON.stringify(req.body.instructions);
+    const vegan = req.body.vegan;
+    const gluten_free = req.body.gluten_free;
+    await user_utils.addRecipeToMyRecipes(user_id, recipe_name, ingredients, instructions, vegan, gluten_free);
+    res.status(200).send("The Recipe successfully saved as favorite");
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/my-recipes', async (req,res,next) => {
+  try{
+    const user_id = req.session.user_id;
+    const my_recipes = await user_utils.getMyRecipes(user_id);
+    res.status(200).send(my_recipes);
+  } catch(error){
+    next(error); 
+  }
+});
+
 
 
 
