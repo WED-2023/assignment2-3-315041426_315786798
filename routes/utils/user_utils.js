@@ -14,10 +14,8 @@ async function addRecipeToMyRecipes(userID, recipeName, ingredients, instruction
     await DButils.execQuery(`INSERT INTO my_recipes (userID, recipeName, Ingredients, Instructions, vegan, glutenFree) VALUES ('${userID}','${recipeName}','${ingredients}','${instructions}','${vegan}','${glutenFree}')`);
 }
 async function getMyRecipes(userID){
-    const my_recipes = await DButils.execQuery(`select recipeName,ingredients,instructions,vegan,glutenFree from my_recipes where userID='${userID}'`);
+    const my_recipes = await DButils.execQuery(`select recipeName,ingredients,instructions,vegan,glutenFree FROM my_recipes WHERE UserID='${userID}'`);
     return my_recipes;
-
 
 }
 module.exports = {addRecipeToMyRecipes ,markAsFavorite, getFavoriteRecipes, getMyRecipes};
-S
