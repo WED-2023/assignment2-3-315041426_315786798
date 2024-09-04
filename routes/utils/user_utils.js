@@ -18,4 +18,36 @@ async function getMyRecipes(userID){
     return my_recipes;
 
 }
-module.exports = {addRecipeToMyRecipes ,markAsFavorite, getFavoriteRecipes, getMyRecipes};
+async function get3LastViewedRecipes(userID){
+    const last3ViewedRecipes = await DButils.execQuery(
+    `SELECT recipe_id 
+    FROM UserViewedRecipes 
+    WHERE user_id = '${userID}' 
+    ORDER BY viewed_at DESC 
+    LIMIT 3;`);
+}
+
+async function insertNewViewedRecipe(userID, recipeID){
+    await DButils.execQuery(`INSERT INTO userviewedrecipes (user_id, recipe_id, viewed_at)
+VALUES ('${userID}', '${recipeID}', CURRENT_TIMESTAMP)
+ON DUPLICATE KEY UPDATE viewed_at = CURRENT_TIMESTAMP;
+`);
+}
+
+async function deleteOldViewedRecipes(userID){
+    await DButils.execQuery(
+    `DELETE FROM UserViewedRecipes 
+    WHERE user_id = ${userID} 
+    AND recipe_id NOT IN (
+        SELECT recipe_id 
+        FROM (
+            SELECT recipe_id 
+            FROM UserViewedRecipes 
+            WHERE user_id = ${userID} 
+            ORDER BY viewed_at DESC 
+            LIMIT 3
+        ) AS temp
+    );`);
+}
+
+module.exports = {get3LastViewedRecipes ,insertNewViewedRecipe,deleteOldViewedRecipes ,addRecipeToMyRecipes ,markAsFavorite, getFavoriteRecipes, getMyRecipes};
