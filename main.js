@@ -88,9 +88,10 @@ app.use(function (err, req, res, next) {
 });
 
 
-const server = app.listen(port, () => {
-  console.log(`Server listen on port ${port}`);
+const server = app.listen(port, '0.0.0.0', () => {
+  console.log(`Server is listening on port ${port}`);
 });
+
 
 process.on("SIGINT", function () {
   if (server) {
