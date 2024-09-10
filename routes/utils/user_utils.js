@@ -5,9 +5,9 @@ async function markAsFavorite(userID, recipeID){
 }
 
 
-async function getFavoriteRecipes(user_id){
-    const recipes_id = await DButils.execQuery(`select recipeID from FavoriteRecipes where userID='${user_id}'`);
-    return recipes_id;
+async function getFavoriteRecipesIDs(user_id){
+    const queryResult = await DButils.execQuery(`select recipeID from FavoriteRecipes where userID='${user_id}'`);
+    return queryResult.map((row) => row.recipeID); // return recipeIDs array
 }
 
 async function addRecipeToMyRecipes(userID, recipeName, ingredients, instructions, vegan, glutenFree){
@@ -48,4 +48,4 @@ async function deleteOldViewedRecipes(userID){
     );`);
 }
 
-module.exports = {get3LastViewedRecipes ,insertNewViewedRecipe,deleteOldViewedRecipes ,addRecipeToMyRecipes ,markAsFavorite, getFavoriteRecipes, getMyRecipes};
+module.exports = {get3LastViewedRecipes ,insertNewViewedRecipe,deleteOldViewedRecipes ,addRecipeToMyRecipes ,markAsFavorite, getFavoriteRecipesIDs, getMyRecipes};
