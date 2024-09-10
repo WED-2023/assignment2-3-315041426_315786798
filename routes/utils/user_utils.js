@@ -20,11 +20,8 @@ async function getMyRecipes(userID){
 }
 async function get3LastViewedRecipes(userID){
     const last3ViewedRecipes = await DButils.execQuery(
-    `SELECT recipe_id 
-    FROM UserViewedRecipes 
-    WHERE user_id = '${userID}' 
-    ORDER BY viewed_at DESC 
-    LIMIT 3;`);
+    `SELECT recipe_id FROM userviewedrecipes WHERE user_id ='${userID}'`);
+    return last3ViewedRecipes;
 }
 
 async function insertNewViewedRecipe(userID, recipeID){

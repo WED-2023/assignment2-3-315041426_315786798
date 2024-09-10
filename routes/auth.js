@@ -93,12 +93,15 @@ router.post("/Login", async (req, res, next) => {
 });
 
 router.get("/Login", (req, res) => {
-  if (req.session && req.session.user_id) {
+  res.set("Cache-Control", "no-store"); // Disable caching
+  console.log("Session data:", req.session); // Log the session for debuggings
+  if (req.session.user_id) {
     res.status(200).send({ loggedIn: true, userId: req.session.user_id });
   } else {
     res.status(200).send({ loggedIn: false });
   }
 });
+
 
 
 

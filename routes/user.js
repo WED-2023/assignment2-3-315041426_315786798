@@ -3,7 +3,8 @@ var router = express.Router();
 const DButils = require("./utils/DButils");
 const user_utils = require("./utils/user_utils");
 const recipe_utils = require("./utils/recipes_utils");
-
+const axios = require("axios");
+const api_domain = "https://api.spoonacular.com/recipes";
 /**
  * Authenticate all incoming requests by middleware
  */
@@ -83,8 +84,17 @@ router.get('/my-recipes', async (req,res,next) => {
 router.get('/last-viewed', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
+    console.log("the user id is: " + user_id);
     const lastViewedRecipes = await user_utils.get3LastViewedRecipes(user_id);
-    res.status(200).send(lastViewedRecipes);
+    const lastViewedRecipeIDs = lastViewedRecipes.map(row => row.recipe_id).join(',');
+    const api_response = await axios.get(`${api_domain}/informationBulk`, {
+      params: {
+        ids: lastViewedRecipeIDs,
+        includeNutrition: false,
+        apiKey: process.env.spooncular_apiKey
+      }
+    });
+    res.status(200).send(api_response.data);
   }
   catch(error){
     next(error);
