@@ -8,14 +8,15 @@ router.get("/", (req, res) => res.send("im here at /recipes!"));
  * This path is for searching a recipe
  */
 router.get("/search", async (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store'); // Prevent caching
   try {
-    const searchQuery = req.body.searchQuery;
-    const cuisinesArray = req.body.cuisinesArray || [];
-    const dietsArray = req.body.dietsArray || [];
-    const intolerancesArray = req.body.intolerancesArray || [];
-    const number = req.body.number || 2;
+    const searchQuery = req.query.searchQuery;
+    const cuisinesArray = req.query.cuisinesArray || [];
+    const dietsArray = req.query.dietsArray || [];
+    const intolerancesArray = req.query.intolerancesArray || [];
+    const number = req.query.number || 2;
     const results = await recipes_utils.searchRecipe(searchQuery, cuisinesArray, dietsArray, intolerancesArray, number);
-    res.send(results);
+    res.status(200).send(results);
   } catch (error) {
     next(error);
   }
