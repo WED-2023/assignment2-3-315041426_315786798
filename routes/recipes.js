@@ -9,12 +9,12 @@ router.get("/", (req, res) => res.send("im here at /recipes!"));
  */
 router.get("/search", async (req, res, next) => {
   try {
-    const recipeName = req.query.recipeName;
-    const cuisine = req.query.cuisine;
-    const diet = req.query.diet;
-    const intolerance = req.query.intolerance;
-    const number = req.query.number || 5;
-    const results = await recipes_utils.searchRecipe(recipeName, cuisine, diet, intolerance, number);
+    const searchQuery = req.body.searchQuery;
+    const cuisinesArray = req.body.cuisinesArray || [];
+    const dietsArray = req.body.dietsArray || [];
+    const intolerancesArray = req.body.intolerancesArray || [];
+    const number = req.body.number || 2;
+    const results = await recipes_utils.searchRecipe(searchQuery, cuisinesArray, dietsArray, intolerancesArray, number);
     res.send(results);
   } catch (error) {
     next(error);

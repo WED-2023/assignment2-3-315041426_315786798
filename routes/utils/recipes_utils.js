@@ -37,19 +37,23 @@ async function getRecipeDetails(recipe_id) {
     }
 }
 
-async function searchRecipe(recipeName, cuisine, diet, intolerance, number, username) {
+async function searchRecipe(searchQuery, cuisinesArray, dietsArray, intolerancesArray, number) {
+    const cuisines = cuisinesArray.join(',');
+    const diets = dietsArray.join(',');
+    const intolerances = intolerancesArray.join(',');
     const response = await axios.get(`${api_domain}/complexSearch`, {
         params: {
-            query: recipeName,
-            cuisine: cuisine,
-            diet: diet,
-            intolerances: intolerance,
+            query: searchQuery,
+            cuisine: cuisines,
+            diet: diets,
+            intolerances: intolerances,
             number: number,
+            addRecipeInstructions: true,
+            addRecipeInformation: true,
             apiKey: process.env.spooncular_apiKey
         }
     });
-
-    return getRecipesPreview(response.data.results.map((element) => element.id), username);
+    return response.data.results;
 }
 
 async function getRandomRecipes(number) {
