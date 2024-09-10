@@ -85,16 +85,9 @@ router.get('/last-viewed', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
     console.log("the user id is: " + user_id);
-    const lastViewedRecipes = await user_utils.get3LastViewedRecipes(user_id);
-    const lastViewedRecipeIDs = lastViewedRecipes.map(row => row.recipe_id).join(',');
-    const api_response = await axios.get(`${api_domain}/informationBulk`, {
-      params: {
-        ids: lastViewedRecipeIDs,
-        includeNutrition: false,
-        apiKey: process.env.spooncular_apiKey
-      }
-    });
-    res.status(200).send(api_response.data);
+    const RecipesIDsArray = await user_utils.get3LastViewedRecipes(user_id);
+    const LastViewedRecipes = await recipe_utils.getRecipesBulk(RecipesIDsArray);
+    res.status(200).send(LastViewedRecipes);
   }
   catch(error){
     next(error);

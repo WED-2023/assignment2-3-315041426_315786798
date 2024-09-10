@@ -19,9 +19,10 @@ async function getMyRecipes(userID){
 
 }
 async function get3LastViewedRecipes(userID){
-    const last3ViewedRecipes = await DButils.execQuery(
+    const queryResult = await DButils.execQuery(
     `SELECT recipe_id FROM userviewedrecipes WHERE user_id ='${userID}'`);
-    return last3ViewedRecipes;
+     const RecipesArray = queryResult.map((row) => row.recipe_id);
+     return RecipesArray;
 }
 
 async function insertNewViewedRecipe(userID, recipeID){
