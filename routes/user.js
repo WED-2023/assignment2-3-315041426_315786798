@@ -82,7 +82,7 @@ router.get('/my-recipes', async (req,res,next) => {
 router.get('/last-viewed', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
-    console.log("the user id is: " + user_id);
+    console.log("the user id from request session is:" + user_id);
     const RecipesIDsArray = await user_utils.get3LastViewedRecipes(user_id);
     const LastViewedRecipes = await recipe_utils.getRecipesBulk(RecipesIDsArray);
     res.status(200).send(LastViewedRecipes);
