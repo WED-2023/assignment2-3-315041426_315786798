@@ -1,9 +1,26 @@
 const DButils = require("./DButils");
 
 async function markAsFavorite(userID, recipeID){
-    await DButils.execQuery(`INSERT INTO favoriterecipes (userID, recipeID) VALUES ('${userID}',${recipeID})`);
+    try{
+         await DButils.execQuery(`INSERT INTO favoriterecipes (userID, recipeID) VALUES ('${userID}',${recipeID})`);
+        }
+    catch(error)
+        {
+        console.log(error);
+        }
+   
 }
 
+async function removeFavorite(userID, recipeID){
+
+    const response = await DButils.execQuery(`DELETE FROM favoriterecipes WHERE userID='${userID}' AND recipeID=${recipeID}`);
+    return response;
+}
+
+async function isRecipeInFavorites(userID, recipeID){
+    const response = await DButils.execQuery(`SELECT * FROM favoriterecipes WHERE userID='${userID}' AND recipeID=${recipeID}`);
+    return response.length > 0;
+}
 
 async function getFavoriteRecipesIDs(user_id){
     const queryResult = await DButils.execQuery(`select recipeID from FavoriteRecipes where userID='${user_id}'`);
@@ -48,4 +65,4 @@ async function deleteOldViewedRecipes(userID){
     );`);
 }
 
-module.exports = {get3LastViewedRecipes ,insertNewViewedRecipe,deleteOldViewedRecipes ,addRecipeToMyRecipes ,markAsFavorite, getFavoriteRecipesIDs, getMyRecipes};
+module.exports = {get3LastViewedRecipes ,insertNewViewedRecipe,deleteOldViewedRecipes ,addRecipeToMyRecipes ,markAsFavorite,removeFavorite, getFavoriteRecipesIDs,isRecipeInFavorites, getMyRecipes};
