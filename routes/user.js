@@ -82,13 +82,14 @@ router.post('/my-recipes', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const recipe_name = req.body.recipe_name;
-    const time_to_make = req.body.time_to_make;
-    const ingredients = JSON.stringify(req.body.ingredients);
-    const instructions = JSON.stringify(req.body.instructions);
-    const vegan = req.body.vegan;
-    const gluten_free = req.body.gluten_free;
+    const time_to_make = req.body.time_to_make || 0;
+    const ingredients = req.body.ingredients;
+    const instructions = req.body.instructions;
+    const vegan = req.body.vegan || 'false';
+    const gluten_free = req.body.gluten_free || 'false';
+    console.log("data from request: " + recipe_name + " " + time_to_make + " " + ingredients + " " + instructions + " " + vegan + " " + gluten_free);
     await user_utils.addRecipeToMyRecipes(user_id, recipe_name, ingredients, instructions, vegan, gluten_free, time_to_make);
-    res.status(200).send("The Recipe successfully saved as favorite");
+    res.status(200).send("The Recipe successfully saved to my-recipes!");
   } catch (error) {
     next(error);
   }

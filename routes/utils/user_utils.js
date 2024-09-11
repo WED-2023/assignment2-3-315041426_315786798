@@ -1,3 +1,4 @@
+const e = require("express");
 const DButils = require("./DButils");
 
 async function markAsFavorite(userID, recipeID){
@@ -28,6 +29,23 @@ async function getFavoriteRecipesIDs(user_id){
 }
 
 async function addRecipeToMyRecipes(userID, recipeName, ingredients, instructions, vegan, glutenFree, time_to_make){
+    // convert the vegan and glutenFree from string to Integer, and arrays into JSONS.
+    if (vegan === 'true' || vegan === true)
+    {
+        vegan = 1;
+    }
+    else{
+        vegan = 0;
+    }
+    if (glutenFree === 'true' || glutenFree === true)
+    {
+        glutenFree = 1;
+    }
+    else{
+        glutenFree = 0;
+    }
+    instructions = JSON.stringify(instructions);
+    ingredients = JSON.stringify(ingredients);
     await DButils.execQuery(`INSERT INTO my_recipes (userID, recipeName, Ingredients, Instructions, vegan, glutenFree, time_to_make) VALUES ('${userID}','${recipeName}','${ingredients}','${instructions}','${vegan}','${glutenFree}','${time_to_make}')`);
 }
 async function getMyRecipes(userID){
