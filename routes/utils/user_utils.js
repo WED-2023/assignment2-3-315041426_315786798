@@ -27,8 +27,8 @@ async function getFavoriteRecipesIDs(user_id){
     return queryResult.map((row) => row.recipeID); // return recipeIDs array
 }
 
-async function addRecipeToMyRecipes(userID, recipeName, ingredients, instructions, vegan, glutenFree){
-    await DButils.execQuery(`INSERT INTO my_recipes (userID, recipeName, Ingredients, Instructions, vegan, glutenFree) VALUES ('${userID}','${recipeName}','${ingredients}','${instructions}','${vegan}','${glutenFree}')`);
+async function addRecipeToMyRecipes(userID, recipeName, ingredients, instructions, vegan, glutenFree, time_to_make){
+    await DButils.execQuery(`INSERT INTO my_recipes (userID, recipeName, Ingredients, Instructions, vegan, glutenFree, time_to_make) VALUES ('${userID}','${recipeName}','${ingredients}','${instructions}','${vegan}','${glutenFree}','${time_to_make}')`);
 }
 async function getMyRecipes(userID){
     const my_recipes = await DButils.execQuery(`select recipeName,ingredients,instructions,vegan,glutenFree FROM my_recipes WHERE UserID='${userID}'`);
