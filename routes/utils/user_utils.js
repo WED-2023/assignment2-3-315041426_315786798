@@ -49,7 +49,7 @@ async function addRecipeToMyRecipes(userID, recipeName, ingredients, instruction
     await DButils.execQuery(`INSERT INTO my_recipes (userID, recipeName, Ingredients, Instructions, vegan, glutenFree, time_to_make) VALUES ('${userID}','${recipeName}','${ingredients}','${instructions}','${vegan}','${glutenFree}','${time_to_make}')`);
 }
 async function getMyRecipes(userID){
-    const my_recipes = await DButils.execQuery(`select recipeName,ingredients,instructions,vegan,glutenFree FROM my_recipes WHERE UserID='${userID}'`);
+    const my_recipes = await DButils.execQuery(`select RecipeID,recipeName,Ingredients,Instructions,vegan,glutenFree,time_to_make FROM my_recipes WHERE UserID='${userID}'`);
     return my_recipes;
 
 }
